@@ -6,7 +6,7 @@ const Splash = () => {
 
         <div className="h-screen bo flex flex-col items-center justify-center bg-white">
             <div  className="flex flex-col items-center space-y-4">
-                <Link to="onboarding">
+                <Link to="/onboarding">
                 {/* Logo */}
                 <div className="w-20 h-20 flex items-center justify-center">
                     <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="1.5">

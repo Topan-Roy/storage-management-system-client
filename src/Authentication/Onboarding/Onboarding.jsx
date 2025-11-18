@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 const Onboarding = () => {
     return (
@@ -25,9 +26,12 @@ const Onboarding = () => {
       </div>
 
       <div className="flex flex-col items-center space-y-4 mb-12">
-        <button className="w-full bg-black text-white py-4 rounded-full text-sm font-medium">
+        <Link to="/login" className="w-full">
+        <button  className="w-full bg-black text-white py-4 rounded-full text-sm font-medium">
           Get Started for free
         </button>
+        </Link>
+        
 
         <p className="text-sm underline text-gray-700">Watch How It Works</p>
       </div>
