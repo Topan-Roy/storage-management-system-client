@@ -41,7 +41,7 @@ const VerifyCode = () => {
           />
         ))}
       </div>
-        <Link to="/ResetPassword">
+        <Link to="/resetpassword">
         <button className="mt-10 w-full bg-black text-white py-4 rounded-full font-medium">
         Verify
       </button>

@@ -16,7 +16,7 @@ const Splash = () => {
                     </svg>
                 </div>
 
-                <h1 className="text-2xl font-semibold">Jotter</h1>
+                <h1 className="text-2xl font-bold">Jotter</h1>
                 </Link>
             </div>
         </div>
