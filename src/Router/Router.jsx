@@ -5,6 +5,9 @@ import Home from "../Page/Home/Home";
 import Onboarding from "../Authentication/Onboarding/Onboarding";
 import Login from "../Authentication/Login/Login";
 import Signup from "../Authentication/Signup/Signup";
+import ForgotPassword from "../Authentication/ForgotPassword/ForgotPassword";
+import VerifyCode from "../Authentication/VerifyCode/VerifyCode";
+import ResetPassword from "../Authentication/ResetPassword/ResetPassword";
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +29,18 @@ export const router = createBrowserRouter([
             {
             path:"signup",
             Component:Signup
+            },
+            {
+            path:"forgotpassword",
+            Component:ForgotPassword
+            },
+            {
+            path:"verifycode",
+            Component:VerifyCode
+            },
+            {
+            path:"resetpassword",
+            Component:ResetPassword
             },
 
         ]

@@ -24,10 +24,12 @@ const Login = () => {
             />
             <span className="absolute right-4 top-4 text-gray-500">👁️</span>
           </div>
-
-          <div className="text-right text-sm">
+        <Link to="/forgotpassword">
+        <div className="text-right text-sm">
             <button className="underline text-gray-600">Forgot Password</button>
           </div>
+        </Link>
+          
         </div>
 
         <button className="mt-6 w-full bg-black text-white py-4 rounded-full font-medium">
