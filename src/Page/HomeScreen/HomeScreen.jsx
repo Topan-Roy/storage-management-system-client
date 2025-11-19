@@ -438,7 +438,10 @@ export function BottomNav({ open, setOpen, handleSelect, createFolderHandler }) 
           <NavItem icon="🔖" label="Favorite" />
         </Link>
         <button onClick={() => setOpen(!open)} className="absolute left-1/2 -translate-x-1/2 -top-6 bg-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-3xl">{open ? "✕" : "+"}</button>
-        <NavItem icon="📝" label="Notes" />
+        <Link to="/calendar">
+        <NavItem icon="📅" label="Calender" />
+        </Link>
+        
         <Link to="/profilepage"><NavItem icon="👤" label="Profile" /></Link>
       </div>
 

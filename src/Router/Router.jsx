@@ -15,6 +15,7 @@ import ImagesPage from "../Page/ImagesPage/ImagesPage";
 import PDFPage from "../Page/PDFPage/PDFPage";
 import NotesPage from "../Page/NotesPage/NotesPage";
 import FavoritePage from "../Page/FavoritePage/FavoritePage";
+import Calendar from "../Page/Calendar/Calendar";
 
 export const router = createBrowserRouter([
     {
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
             {
             path:"favorite",
             Component:FavoritePage
+            },
+            {
+            path:"calendar",
+            Component:Calendar
             },
 
         ]
