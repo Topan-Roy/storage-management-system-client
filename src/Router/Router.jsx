@@ -8,6 +8,8 @@ import Signup from "../Authentication/Signup/Signup";
 import ForgotPassword from "../Authentication/ForgotPassword/ForgotPassword";
 import VerifyCode from "../Authentication/VerifyCode/VerifyCode";
 import ResetPassword from "../Authentication/ResetPassword/ResetPassword";
+import HomeScreen from "../Page/HomeScreen/HomeScreen";
+import ProfilePage from "../Authentication/ProfilePage/ProfilePage";
 
 export const router = createBrowserRouter([
     {
@@ -41,6 +43,14 @@ export const router = createBrowserRouter([
             {
             path:"resetpassword",
             Component:ResetPassword
+            },
+            {
+            path:"homescreen",
+            Component:HomeScreen
+            },
+            {
+            path:"profilepage",
+            Component:ProfilePage
             },
 
         ]

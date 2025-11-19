@@ -50,7 +50,7 @@ const Login = () => {
       });
 
       // 4️⃣ Navigate to home/dashboard
-      navigate("/signup");
+      navigate("/homescreen");
 
     } catch (error) {
       console.error(error);
@@ -102,7 +102,7 @@ const Login = () => {
         timer: 1500,
       });
 
-      navigate("/signup");
+      navigate("/homescreen");
     } catch (error) {
       console.error(error);
       Swal.fire("Error", error.message, "error");

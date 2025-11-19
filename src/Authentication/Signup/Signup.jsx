@@ -71,7 +71,7 @@ const Signup = () => {
         setTermsChecked(false);
 
         // Navigate to login
-        navigate("/login");
+        navigate("/homescreen");
       } else {
         Swal.fire({
           icon: "error",
