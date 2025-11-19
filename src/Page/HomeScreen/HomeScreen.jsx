@@ -143,81 +143,99 @@ export default function HomeScreen() {
   };
 
   const handleAction = async (file, action) => {
-    switch (action) {
-      case "favorite":
-        setRecentFiles(prev =>
-          prev.map(f => f._id === file._id ? { ...f, favorite: !f.favorite } : f)
-        );
-        break;
+  switch (action) {
 
-      case "rename":
-        Swal.fire({
-          title: "Rename File",
-          input: "text",
-          inputLabel: "New name",
-          inputValue: file.name,
-          showCancelButton: true,
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            try {
-              if (!file.type) file.type = "folder";
+    // ✅ FAVORITE SYSTEM (DB + UI)
+    case "favorite":
+  try {
+    await axios.patch(`http://localhost:3000/${file.type}/${file._id}/favorite`, {
+      favorite: !file.favorite,
+      email: file.email
+    });
 
-              await axios.put(`http://localhost:3000/rename/${file.type}/${file._id}`, {
-                newName: result.value,
-                email
-              });
+    setRecentFiles(prev =>
+      prev.map(f => f._id === file._id ? { ...f, favorite: !f.favorite } : f)
+    );
+  } catch (err) {
+    console.error("Favorite toggle failed:", err);
+    Swal.fire("Failed!", "Something went wrong.", "error");
+  }
+  break;
 
-              updateState(file._id, "name", result.value);
+    // ✅ RENAME
+    case "rename":
+      Swal.fire({
+        title: "Rename File",
+        input: "text",
+        inputLabel: "New name",
+        inputValue: file.name,
+        showCancelButton: true,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            if (!file.type) file.type = "folder";
 
-              Swal.fire("Renamed!", `${file.name} is now ${result.value}`, "success");
-            } catch (err) {
-              console.error("Rename failed:", err);
-              Swal.fire("Failed!", "Something went wrong.", "error");
-            }
+            await axios.put(`http://localhost:3000/rename/${file.type}/${file._id}`, {
+              newName: result.value,
+              email
+            });
+
+            updateState(file._id, "name", result.value);
+
+            Swal.fire("Renamed!", `${file.name} is now ${result.value}`, "success");
+          } catch (err) {
+            console.error("Rename failed:", err);
+            Swal.fire("Failed!", "Something went wrong.", "error");
           }
-        });
-        break;
-
-      case "duplicate":
-        try {
-          const duplicateData = { ...file, name: file.name + " copy", _id: undefined };
-          const res = await axios.post(`http://localhost:3000/upload/${file.type}`, duplicateData);
-          const newFile = { ...res.data, icon: getFileIcon(file.type) };
-
-          addFileToState(newFile);
-
-          Swal.fire("Duplicated!", `${file.name} duplicated successfully.`, "success");
-        } catch (err) {
-          console.error("Duplicate failed:", err);
-          Swal.fire("Failed!", "Something went wrong.", "error");
         }
-        break;
+      });
+      break;
 
-      case "delete":
-        Swal.fire({
-          title: "Are you sure?",
-          text: `Delete ${file.name}?`,
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Yes, delete it!",
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            try {
-              await axios.delete(`http://localhost:3000/delete/${file.type}/${file._id}`);
-              removeFileFromState(file);
-              Swal.fire("Deleted!", `${file.name} has been deleted.`, "success");
-            } catch (err) {
-              console.error("Delete failed:", err);
-              Swal.fire("Failed!", "Something went wrong.", "error");
-            }
+    // ✅ DUPLICATE
+    case "duplicate":
+      try {
+        const duplicateData = { ...file, name: file.name + " copy", _id: undefined };
+        const res = await axios.post(`http://localhost:3000/upload/${file.type}`, duplicateData);
+
+        const newFile = { ...res.data, icon: getFileIcon(file.type) };
+        addFileToState(newFile);
+
+        Swal.fire("Duplicated!", `${file.name} duplicated successfully.`, "success");
+      } catch (err) {
+        console.error("Duplicate failed:", err);
+        Swal.fire("Failed!", "Something went wrong.", "error");
+      }
+      break;
+
+    // ✅ DELETE
+    case "delete":
+      Swal.fire({
+        title: "Are you sure?",
+        text: `Delete ${file.name}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await axios.delete(`http://localhost:3000/delete/${file.type}/${file._id}`);
+
+            removeFileFromState(file);
+
+            Swal.fire("Deleted!", `${file.name} has been deleted.`, "success");
+          } catch (err) {
+            console.error("Delete failed:", err);
+            Swal.fire("Failed!", "Something went wrong.", "error");
           }
-        });
-        break;
+        }
+      });
+      break;
 
-      default:
-        break;
-    }
-  };
+    default:
+      break;
+  }
+};
+
   function formatSize(sizeInMB) {
     if (sizeInMB < 1) {
       return `${(sizeInMB * 1024).toFixed(2)} KB`;
@@ -302,41 +320,41 @@ export default function HomeScreen() {
 
           <div className="bg-[#F3F3F3] rounded-xl p-4 shadow-sm flex gap-3 items-start">
             <Link to="/folder">
-            <FaRegFolder className="text-3xl text-yellow-500" />
-            <div>
-              <h4 className="text-sm font-semibold">Folders</h4>
-              <p className="text-xs text-gray-600">Total items: {folders.length}</p>
-              <p className="text-xs text-gray-600">
-                Storage: {formatSize(folders.reduce((a, b) => a + Number(b.size || 0), 0))}
-              </p>
-            </div>
+              <FaRegFolder className="text-3xl text-yellow-500" />
+              <div>
+                <h4 className="text-sm font-semibold">Folders</h4>
+                <p className="text-xs text-gray-600">Total items: {folders.length}</p>
+                <p className="text-xs text-gray-600">
+                  Storage: {formatSize(folders.reduce((a, b) => a + Number(b.size || 0), 0))}
+                </p>
+              </div>
             </Link>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-           <Link to="/notespage">
-          <CategoryCard
-            icon={<FaRegStickyNote className="text-3xl text-purple-600" />}
-            title="Notes"
-            files={notes}
-          />
+          <Link to="/notespage">
+            <CategoryCard
+              icon={<FaRegStickyNote className="text-3xl text-purple-600" />}
+              title="Notes"
+              files={notes}
+            />
           </Link>
           <Link to="/imagespage">
-          <CategoryCard
-            icon={<FaRegFileImage className="text-3xl text-green-600" />}
-            title="Images"
-            files={images}
-          />
+            <CategoryCard
+              icon={<FaRegFileImage className="text-3xl text-green-600" />}
+              title="Images"
+              files={images}
+            />
           </Link>
-           <Link to="/pdfpage">
-           <CategoryCard
-            icon={<FaRegFilePdf className="text-3xl text-red-500" />}
-            title="PDF"
-            files={pdfs}
-          />
-           </Link>
-          
+          <Link to="/pdfpage">
+            <CategoryCard
+              icon={<FaRegFilePdf className="text-3xl text-red-500" />}
+              title="PDF"
+              files={pdfs}
+            />
+          </Link>
+
         </div>
       </div>
 
@@ -416,7 +434,9 @@ export function BottomNav({ open, setOpen, handleSelect, createFolderHandler }) 
     <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-white">
       <div className="border-t bg-white relative flex justify-between px-10 py-3">
         <Link to='/homescreen'><NavItem icon="🏠" label="Home" active /></Link>
-        <NavItem icon="🔖" label="Favorite" />
+        <Link to="/favorite">
+          <NavItem icon="🔖" label="Favorite" />
+        </Link>
         <button onClick={() => setOpen(!open)} className="absolute left-1/2 -translate-x-1/2 -top-6 bg-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-3xl">{open ? "✕" : "+"}</button>
         <NavItem icon="📝" label="Notes" />
         <Link to="/profilepage"><NavItem icon="👤" label="Profile" /></Link>

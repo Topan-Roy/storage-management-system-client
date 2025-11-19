@@ -14,6 +14,7 @@ import FolderPage from "../Page/FolderPage/FolderPage";
 import ImagesPage from "../Page/ImagesPage/ImagesPage";
 import PDFPage from "../Page/PDFPage/PDFPage";
 import NotesPage from "../Page/NotesPage/NotesPage";
+import FavoritePage from "../Page/FavoritePage/FavoritePage";
 
 export const router = createBrowserRouter([
     {
@@ -71,6 +72,10 @@ export const router = createBrowserRouter([
             {
             path:"notespage",
             Component:NotesPage
+            },
+            {
+            path:"favorite",
+            Component:FavoritePage
             },
 
         ]
