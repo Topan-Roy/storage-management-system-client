@@ -283,7 +283,10 @@ export default function HomeScreen() {
       {/* HEADER */}
       <div className="flex justify-between items-center px-5 pt-5 mb-4">
         <h1 className="text-3xl font-bold">Jotter</h1>
-        <MdLockOutline className="text-xl text-black" />
+        <Link to="/formlayout">
+         <MdLockOutline className="text-xl text-black" />
+        </Link>
+       
       </div>
 
       {/* SEARCH */}

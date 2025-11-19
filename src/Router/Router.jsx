@@ -16,6 +16,7 @@ import PDFPage from "../Page/PDFPage/PDFPage";
 import NotesPage from "../Page/NotesPage/NotesPage";
 import FavoritePage from "../Page/FavoritePage/FavoritePage";
 import Calendar from "../Page/Calendar/Calendar";
+import FormLayout from "../Page/FormLayout/FormLayout";
 
 export const router = createBrowserRouter([
     {
@@ -81,6 +82,10 @@ export const router = createBrowserRouter([
             {
             path:"calendar",
             Component:Calendar
+            },
+            {
+            path:"formlayout",
+            Component:FormLayout
             },
 
         ]
