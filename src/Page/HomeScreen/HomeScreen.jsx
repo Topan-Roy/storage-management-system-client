@@ -219,14 +219,14 @@ export default function HomeScreen() {
     }
   };
   function formatSize(sizeInMB) {
-  if (sizeInMB < 1) {
-    return `${(sizeInMB * 1024).toFixed(2)} KB`;
-  } else if (sizeInMB < 1024) {
-    return `${sizeInMB.toFixed(2)} MB`;
-  } else {
-    return `${(sizeInMB / 1024).toFixed(2)} GB`;
+    if (sizeInMB < 1) {
+      return `${(sizeInMB * 1024).toFixed(2)} KB`;
+    } else if (sizeInMB < 1024) {
+      return `${sizeInMB.toFixed(2)} MB`;
+    } else {
+      return `${(sizeInMB / 1024).toFixed(2)} GB`;
+    }
   }
-}
 
 
   // HELPER FUNCTIONS
@@ -277,60 +277,68 @@ export default function HomeScreen() {
 
       {/* STORAGE BOX */}
       {/* STORAGE BOX */}
-<div className="px-5 mb-4">
-  <div className="grid grid-cols-2 gap-3 mb-3">
-    <div className="bg-[#F3F3F3] rounded-xl p-4 shadow-sm flex gap-3 items-start">
-      <MdStorage className="text-3xl text-black" />
-      <div className="flex-1">
-        <p className="text-xs font-medium">
-          Total Storage: <b>{formatSize(TOTAL_STORAGE)}</b>
-        </p>
-        <p className="text-xs text-gray-600">
-          Used: {formatSize(usedStorage)}
-        </p>
-        <p className="text-xs text-gray-600">
-          Available: {formatSize(availableStorage)}
-        </p>
-        <div className="w-full bg-gray-200 h-2 mt-1 rounded-full">
-          <div
-            className="bg-green-500 h-2 rounded-full"
-            style={{ width: `${(usedStorage / TOTAL_STORAGE) * 100}%` }}
+      <div className="px-5 mb-4">
+        <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="bg-[#F3F3F3] rounded-xl p-4 shadow-sm flex gap-3 items-start">
+            <MdStorage className="text-3xl text-black" />
+            <div className="flex-1">
+              <p className="text-xs font-medium">
+                Total Storage: <b>{formatSize(TOTAL_STORAGE)}</b>
+              </p>
+              <p className="text-xs text-gray-600">
+                Used: {formatSize(usedStorage)}
+              </p>
+              <p className="text-xs text-gray-600">
+                Available: {formatSize(availableStorage)}
+              </p>
+              <div className="w-full bg-gray-200 h-2 mt-1 rounded-full">
+                <div
+                  className="bg-green-500 h-2 rounded-full"
+                  style={{ width: `${(usedStorage / TOTAL_STORAGE) * 100}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#F3F3F3] rounded-xl p-4 shadow-sm flex gap-3 items-start">
+            <Link to="/folder">
+            <FaRegFolder className="text-3xl text-yellow-500" />
+            <div>
+              <h4 className="text-sm font-semibold">Folders</h4>
+              <p className="text-xs text-gray-600">Total items: {folders.length}</p>
+              <p className="text-xs text-gray-600">
+                Storage: {formatSize(folders.reduce((a, b) => a + Number(b.size || 0), 0))}
+              </p>
+            </div>
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+           <Link to="/notespage">
+          <CategoryCard
+            icon={<FaRegStickyNote className="text-3xl text-purple-600" />}
+            title="Notes"
+            files={notes}
           />
+          </Link>
+          <Link to="/imagespage">
+          <CategoryCard
+            icon={<FaRegFileImage className="text-3xl text-green-600" />}
+            title="Images"
+            files={images}
+          />
+          </Link>
+           <Link to="/pdfpage">
+           <CategoryCard
+            icon={<FaRegFilePdf className="text-3xl text-red-500" />}
+            title="PDF"
+            files={pdfs}
+          />
+           </Link>
+          
         </div>
       </div>
-    </div>
-
-    <div className="bg-[#F3F3F3] rounded-xl p-4 shadow-sm flex gap-3 items-start">
-      <FaRegFolder className="text-3xl text-yellow-500" />
-<div>
-  <h4 className="text-sm font-semibold">Folders</h4>
-  <p className="text-xs text-gray-600">Total items: {folders.length}</p>
-  <p className="text-xs text-gray-600">
-    Storage: {formatSize(folders.reduce((a, b) => a + Number(b.size || 0), 0))}
-  </p>
-</div>
-
-    </div>
-  </div>
-
-  <div className="grid grid-cols-3 gap-3">
-    <CategoryCard 
-      icon={<FaRegStickyNote className="text-3xl text-purple-600" />} 
-      title="Notes" 
-      files={notes} 
-    />
-    <CategoryCard 
-      icon={<FaRegFileImage className="text-3xl text-green-600" />} 
-      title="Images" 
-      files={images} 
-    />
-    <CategoryCard 
-      icon={<FaRegFilePdf className="text-3xl text-red-500" />} 
-      title="PDF" 
-      files={pdfs} 
-    />
-  </div>
-</div>
 
 
 
@@ -408,7 +416,7 @@ export function BottomNav({ open, setOpen, handleSelect, createFolderHandler }) 
     <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-white">
       <div className="border-t bg-white relative flex justify-between px-10 py-3">
         <Link to='/homescreen'><NavItem icon="🏠" label="Home" active /></Link>
-        <NavItem icon="🔖" label="Bookmark" />
+        <NavItem icon="🔖" label="Favorite" />
         <button onClick={() => setOpen(!open)} className="absolute left-1/2 -translate-x-1/2 -top-6 bg-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-3xl">{open ? "✕" : "+"}</button>
         <NavItem icon="📝" label="Notes" />
         <Link to="/profilepage"><NavItem icon="👤" label="Profile" /></Link>

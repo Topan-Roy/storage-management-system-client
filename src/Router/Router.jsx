@@ -10,6 +10,10 @@ import VerifyCode from "../Authentication/VerifyCode/VerifyCode";
 import ResetPassword from "../Authentication/ResetPassword/ResetPassword";
 import HomeScreen from "../Page/HomeScreen/HomeScreen";
 import ProfilePage from "../Authentication/ProfilePage/ProfilePage";
+import FolderPage from "../Page/FolderPage/FolderPage";
+import ImagesPage from "../Page/ImagesPage/ImagesPage";
+import PDFPage from "../Page/PDFPage/PDFPage";
+import NotesPage from "../Page/NotesPage/NotesPage";
 
 export const router = createBrowserRouter([
     {
@@ -51,6 +55,22 @@ export const router = createBrowserRouter([
             {
             path:"profilepage",
             Component:ProfilePage
+            },
+            {
+            path:"folder",
+            Component:FolderPage
+            },
+            {
+            path:"imagespage",
+            Component:ImagesPage
+            },
+            {
+            path:"pdfpage",
+            Component:PDFPage
+            },
+            {
+            path:"notespage",
+            Component:NotesPage
             },
 
         ]
