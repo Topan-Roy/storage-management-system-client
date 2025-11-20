@@ -17,6 +17,13 @@ import NotesPage from "../Page/NotesPage/NotesPage";
 import FavoritePage from "../Page/FavoritePage/FavoritePage";
 import Calendar from "../Page/Calendar/Calendar";
 import FormLayout from "../Page/FormLayout/FormLayout";
+import EditProfile from "../Authentication/ProfilePage/EditProfile";
+import Settings from "../Authentication/ProfilePage/Settings";
+import ChangePassword from "../Authentication/ProfilePage/ChangePassword";
+import Terms from "../Authentication/ProfilePage/Terms";
+import Privacy from "../Authentication/ProfilePage/Privacy";
+import About from "../Authentication/ProfilePage/About";
+import Support from "../Authentication/ProfilePage/Support";
 
 export const router = createBrowserRouter([
     {
@@ -86,6 +93,34 @@ export const router = createBrowserRouter([
             {
             path:"formlayout",
             Component:FormLayout
+            },
+            {
+            path:"editprofile",
+            Component:EditProfile
+            },
+            {
+            path:"settings",
+            Component:Settings
+            },
+            {
+            path:"changepassword",
+            Component:ChangePassword
+            },
+            {
+            path:"terms",
+            Component:Terms
+            },
+            {
+            path:"privacy",
+            Component:Privacy
+            },
+            {
+            path:"about",
+            Component:About
+            },
+            {
+            path:"support",
+            Component:Support
             },
 
         ]

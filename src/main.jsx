@@ -11,10 +11,10 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MobileContainer>
       <AuthProvider>
-<RouterProvider router={router} />,
+        <RouterProvider router={router} />,
       </AuthProvider>
 
     </MobileContainer>
-    
+
   </StrictMode>,
 )

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { BottomNav, NavItem } from '../../Page/HomeScreen/HomeScreen';
 import { AuthContext } from '../../Contexts/AuthProvider';
 
@@ -65,9 +65,16 @@ const ProfilePage = () => {
 
       {/* Options */}
       <div className="w-full px-6 mt-6 space-y-3">
+        <Link to="/editprofile">
         <OptionItem icon="👤" label="Edit Profile" />
-        <OptionItem icon="⚙️" label="Settings" />
+        </Link>
+         <Link to="/settings">
+         <OptionItem icon="⚙️" label="Settings" />
+         </Link>
+        <Link to="/support">
         <OptionItem icon="🎧" label="Support" />
+        </Link>
+        
       </div>
 
       {/* Logout Button */}
