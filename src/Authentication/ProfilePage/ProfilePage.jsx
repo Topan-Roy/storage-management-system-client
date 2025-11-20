@@ -6,7 +6,7 @@ import { AuthContext } from '../../Contexts/AuthProvider';
 
 const ProfilePage = () => {
 
-  const { logOut } = useContext(AuthContext);
+  const { logOut,user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Logout Handler
@@ -61,7 +61,7 @@ const ProfilePage = () => {
       </div>
 
       {/* User Name */}
-      <h2 className="text-lg font-semibold mt-4">Daniel Martinez</h2>
+      <h2 className="text-lg font-semibold mt-4"> {user?.displayName || user?.email || "User"}</h2>
 
       {/* Options */}
       <div className="w-full px-6 mt-6 space-y-3">

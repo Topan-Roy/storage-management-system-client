@@ -1,14 +1,58 @@
-import { useState } from "react";
-import { FiCamera,  FiUser } from "react-icons/fi";
+import { useState, useEffect, useContext } from "react";
+import { FiCamera, FiUser } from "react-icons/fi";
 import { HiOutlineChevronLeft } from "react-icons/hi";
 import { useNavigate } from "react-router";
 
+import { updateProfile } from "firebase/auth";
+import Swal from "sweetalert2";
+import { AuthContext } from "../../Contexts/AuthProvider";
+
 export default function EditProfile() {
-  const [name, setName] = useState("Great");
- const navigate = useNavigate();
+  const { user } = useContext(AuthContext); // Firebase user
+  const [name, setName] = useState(""); // Input value
+  const [serverName, setServerName] = useState(""); // Server name
+  const navigate = useNavigate();
+
+  // Fetch user name from server
+  useEffect(() => {
+    if (user?.uid) {
+      fetch(`http://localhost:3000/users/${user.uid}`) // আপনার server URL
+        .then((res) => res.json())
+        .then((data) => setServerName(data.user.username))
+        .catch((err) => console.log(err));
+    }
+  }, [user]);
+
+  const handleSave = async () => {
+    if (!name.trim()) {
+      Swal.fire("Error", "Name cannot be empty", "error");
+      return;
+    }
+
+    try {
+      // 1️⃣ Update Firebase displayName
+      await updateProfile(user, { displayName: name });
+
+      // 2️⃣ Update server
+      const res = await fetch(`http://localhost:3000/users/${user.uid}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: name }),
+      });
+      const data = await res.json();
+
+      if (!data.success) throw new Error(data.message || "Server error");
+
+      Swal.fire("Success", "Name updated successfully", "success");
+      navigate(-1); // Go back to previous page
+    } catch (err) {
+      Swal.fire("Error", err.message, "error");
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-white flex flex-col items-center px-5 pt-6">
-      
+
       {/* Top Bar */}
       <div className="w-full flex items-center">
         <HiOutlineChevronLeft
@@ -38,13 +82,17 @@ export default function EditProfile() {
         <input
           type="text"
           className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none"
+          placeholder={serverName || "User"} // 🔹 Server name placeholder
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
       </div>
 
       {/* Save Button */}
-      <button className="w-full bg-gray-800 text-white rounded-full py-3 mt-14 text-lg">
+      <button
+        onClick={handleSave}
+        className="w-full bg-gray-800 text-white rounded-full py-3 mt-14 text-lg"
+      >
         Save Change
       </button>
     </div>
