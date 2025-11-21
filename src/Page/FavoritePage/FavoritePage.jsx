@@ -36,7 +36,7 @@ export default function FavoritePage() {
         if (!email) return;
         const fetchFavorites = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/favorites/${email}`);
+                const res = await axios.get(`https://storage-management-system-server.vercel.app/favorites/${email}`);
                 setItems(res.data);
             } catch (err) {
                 console.error("Favorites fetch failed:", err);
@@ -63,7 +63,7 @@ export default function FavoritePage() {
         switch (action) {
             case "favorite":
                 try {
-                    await axios.patch(`http://localhost:3000/${file.type}/${file._id}/favorite`, {
+                    await axios.patch(`https://storage-management-system-server.vercel.app/${file.type}/${file._id}/favorite`, {
                         favorite: !file.favorite,
                         email: file.email,
                     });
@@ -84,7 +84,7 @@ export default function FavoritePage() {
                 }).then(async (result) => {
                     if (result.isConfirmed) {
                         try {
-                            await axios.put(`http://localhost:3000/rename/${file.type}/${file._id}`, {
+                            await axios.put(`https://storage-management-system-server.vercel.app/rename/${file.type}/${file._id}`, {
                                 newName: result.value,
                                 email,
                             });
@@ -102,7 +102,7 @@ export default function FavoritePage() {
                 try {
                     const duplicateData = { ...file, name: file.name + " copy" };
                     delete duplicateData._id;
-                    const res = await axios.post(`http://localhost:3000/upload/${file.type}`, duplicateData);
+                    const res = await axios.post(`https://storage-management-system-server.vercel.app/upload/${file.type}`, duplicateData);
                     addItem(res.data);
                     Swal.fire("Duplicated!", `${file.name} duplicated successfully.`, "success");
                 } catch (err) {
@@ -121,7 +121,7 @@ export default function FavoritePage() {
                 }).then(async (result) => {
                     if (result.isConfirmed) {
                         try {
-                            await axios.delete(`http://localhost:3000/delete/${file.type}/${file._id}`);
+                            await axios.delete(`https://storage-management-system-server.vercel.app/delete/${file.type}/${file._id}`);
                             removeItem(file);
                             Swal.fire("Deleted!", `${file.name} has been deleted.`, "success");
                         } catch (err) {

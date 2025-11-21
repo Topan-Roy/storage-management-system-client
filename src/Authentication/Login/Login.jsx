@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../../Contexts/AuthProvider";
+import { FcGoogle } from "react-icons/fc";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // 🔹 Email/password login
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -23,15 +26,14 @@ const Login = () => {
     }
 
     try {
-      // 1️⃣ Firebase login
       const userCredential = await login(email, password);
       const uid = userCredential.user.uid;
 
-      // 2️⃣ Optionally, check user from your server (MongoDB)
-      const res = await axios.get(`http://localhost:3000/users/${uid}`);
+      // Check if user exists on server
+      const res = await axios.get(`https://storage-management-system-server.vercel.app/users/${uid}`);
       const userData = res.data;
 
-      if (!userData) {
+      if (!userData || !userData.success) {
         Swal.fire({
           icon: "error",
           title: "User not found on server!",
@@ -40,7 +42,6 @@ const Login = () => {
         return;
       }
 
-      // 3️⃣ Success alert
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -49,9 +50,7 @@ const Login = () => {
         timer: 1500,
       });
 
-      // 4️⃣ Navigate to home/dashboard
       navigate("/homescreen");
-
     } catch (error) {
       console.error(error);
       if (error.code === "auth/user-not-found") {
@@ -78,21 +77,32 @@ const Login = () => {
     setLoading(false);
   };
 
+  // 🔹 Google login
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      const userCredential = await googleLogin();
-      const uid = userCredential.user.uid;
-      const email = userCredential.user.email;
-      const username = userCredential.user.displayName;
+      const userCredential = await googleLogin(); // Firebase popup
+      const user = userCredential.user;
 
-      // Save/check user in server
-      await axios.post("http://localhost:3000/users", {
-        uid,
-        email,
-        username,
-        role: "user",
-      });
+      const uid = user.uid;
+      const email = user.email;
+      const username = user.displayName;
+
+      // POST user to server
+      try {
+        await axios.post("https://storage-management-system-server.vercel.app/users", {
+          uid,
+          username,
+          email,
+          role: "user",
+        });
+      } catch (err) {
+        if (err.response?.status === 400 && err.response.data.message === "User already exists") {
+          console.log("User already exists, continue login");
+        } else {
+          throw err;
+        }
+      }
 
       Swal.fire({
         position: "top-end",
@@ -136,9 +146,9 @@ const Login = () => {
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-4 text-gray-500 cursor-pointer"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
             >
-              {showPassword ? "🙈" : "👁️"}
+              {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
             </span>
           </div>
 
@@ -166,9 +176,9 @@ const Login = () => {
         type="button"
         onClick={handleGoogleLogin}
         disabled={loading}
-        className="w-full border flex items-center justify-center space-x-2 py-4 rounded-full mb-10"
+        className="w-full border flex items-center justify-center space-x-2 py-4 rounded-full mb-15"
       >
-        <span>🌐</span>
+        <FcGoogle size={24} />
         <span>Sign In With Google</span>
       </button>
     </form>

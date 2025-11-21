@@ -17,7 +17,7 @@ export default function NotesPage() {
 
     const fetchNotes = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/notes/${email}`);
+        const res = await axios.get(`https://storage-management-system-server.vercel.app/notes/${email}`);
         setNotes(res.data);
       } catch (err) {
         console.error("Fetch notes failed:", err);

@@ -46,7 +46,7 @@ const Signup = () => {
       const uid = userCredential.user.uid;
 
       // 2️⃣ Save extra user data to server (MongoDB)
-      const response = await axios.post("http://localhost:3000/users", {
+      const response = await axios.post("https://storage-management-system-server.vercel.app/users", {
         uid,
         username,
         email,

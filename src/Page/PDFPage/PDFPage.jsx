@@ -17,7 +17,7 @@ export default function PdfPage() {
 
     const fetchPdfs = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/pdfs/${email}`);
+        const res = await axios.get(`https://storage-management-system-server.vercel.app/pdfs/${email}`);
         setPdfs(res.data);
       } catch (err) {
         console.error("Fetch PDFs failed:", err);

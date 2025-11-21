@@ -38,7 +38,7 @@ export default function Calendar() {
     if (!date) return;
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:3000/items/${userEmail}/${date}`);
+      const res = await axios.get(`https://storage-management-system-server.vercel.app/items/${userEmail}/${date}`);
       const allItems = res?.data;
 
       // Filter in frontend by selected date

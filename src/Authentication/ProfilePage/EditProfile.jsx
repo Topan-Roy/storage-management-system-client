@@ -16,7 +16,7 @@ export default function EditProfile() {
   // Fetch user name from server
   useEffect(() => {
     if (user?.uid) {
-      fetch(`http://localhost:3000/users/${user.uid}`) // আপনার server URL
+      fetch(`https://storage-management-system-server.vercel.app/users/${user.uid}`) // আপনার server URL
         .then((res) => res.json())
         .then((data) => setServerName(data.user.username))
         .catch((err) => console.log(err));
@@ -34,7 +34,7 @@ export default function EditProfile() {
       await updateProfile(user, { displayName: name });
 
       // 2️⃣ Update server
-      const res = await fetch(`http://localhost:3000/users/${user.uid}`, {
+      const res = await fetch(`https://storage-management-system-server.vercel.app/users/${user.uid}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: name }),

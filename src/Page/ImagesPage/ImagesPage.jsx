@@ -17,7 +17,7 @@ export default function ImagePage() {
 
     const fetchImages = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/images/${email}`);
+        const res = await axios.get(`https://storage-management-system-server.vercel.app/images/${email}`);
         setImages(res.data);
       } catch (err) {
         console.error("Fetch images failed:", err);

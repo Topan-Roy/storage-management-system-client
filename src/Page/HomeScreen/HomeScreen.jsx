@@ -4,7 +4,7 @@ import { BsSearch, BsTextRight } from "react-icons/bs";
 import { FaRegFolder, FaRegFilePdf, FaRegFileImage, FaRegStickyNote } from "react-icons/fa";
 import { MdStorage, MdLockOutline } from "react-icons/md";
 import axios from "axios";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import { AuthContext } from "../../Contexts/AuthProvider";
 
 export default function HomeScreen() {
@@ -29,10 +29,10 @@ export default function HomeScreen() {
     const fetchData = async () => {
       try {
         const [imgRes, pdfRes, noteRes, folderRes] = await Promise.all([
-          axios.get(`http://localhost:3000/images/${email}`),
-          axios.get(`http://localhost:3000/pdfs/${email}`),
-          axios.get(`http://localhost:3000/notes/${email}`),
-          axios.get(`http://localhost:3000/folders/${email}`),
+          axios.get(`https://storage-management-system-server.vercel.app/images/${email}`),
+          axios.get(`https://storage-management-system-server.vercel.app/pdfs/${email}`),
+          axios.get(`https://storage-management-system-server.vercel.app/notes/${email}`),
+          axios.get(`https://storage-management-system-server.vercel.app/folders/${email}`),
         ]);
 
         const allImages = imgRes.data.map(f => ({ ...f, type: "image", icon: <FaRegFileImage className="text-green-500" /> }));
@@ -86,7 +86,7 @@ export default function HomeScreen() {
     };
 
     try {
-      const res = await axios.post(`http://localhost:3000/upload/${type}`, newItem);
+      const res = await axios.post(`https://storage-management-system-server.vercel.app/upload/${type}`, newItem);
       const itemWithIcon = { ...res.data, icon: getFileIcon(type) };
 
       if (type === "image") setImages(prev => [itemWithIcon, ...prev]);
@@ -148,7 +148,7 @@ export default function HomeScreen() {
     // ✅ FAVORITE SYSTEM (DB + UI)
     case "favorite":
   try {
-    await axios.patch(`http://localhost:3000/${file.type}/${file._id}/favorite`, {
+    await axios.patch(`https://storage-management-system-server.vercel.app/${file.type}/${file._id}/favorite`, {
       favorite: !file.favorite,
       email: file.email
     });
@@ -175,7 +175,7 @@ export default function HomeScreen() {
           try {
             if (!file.type) file.type = "folder";
 
-            await axios.put(`http://localhost:3000/rename/${file.type}/${file._id}`, {
+            await axios.put(`https://storage-management-system-server.vercel.app/rename/${file.type}/${file._id}`, {
               newName: result.value,
               email
             });
@@ -195,7 +195,7 @@ export default function HomeScreen() {
     case "duplicate":
       try {
         const duplicateData = { ...file, name: file.name + " copy", _id: undefined };
-        const res = await axios.post(`http://localhost:3000/upload/${file.type}`, duplicateData);
+        const res = await axios.post(`https://storage-management-system-server.vercel.app/upload/${file.type}`, duplicateData);
 
         const newFile = { ...res.data, icon: getFileIcon(file.type) };
         addFileToState(newFile);
@@ -218,7 +218,7 @@ export default function HomeScreen() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.delete(`http://localhost:3000/delete/${file.type}/${file._id}`);
+            await axios.delete(`https://storage-management-system-server.vercel.app/delete/${file.type}/${file._id}`);
 
             removeFileFromState(file);
 
@@ -434,18 +434,30 @@ function RecentItem({ file, handleAction }) {
 // BOTTOM NAV
 export function BottomNav({ open, setOpen, handleSelect, createFolderHandler }) {
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-white">
+    <div className="fixed -bottom-1 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-white">
       <div className="border-t bg-white relative flex justify-between px-10 py-3">
-        <Link to='/homescreen'><NavItem icon="🏠" label="Home" active /></Link>
-        <Link to="/favorite">
-          <NavItem icon="🔖" label="Favorite" />
-        </Link>
-        <button onClick={() => setOpen(!open)} className="absolute left-1/2 -translate-x-1/2 -top-6 bg-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-3xl">{open ? "✕" : "+"}</button>
-        <Link to="/calendar">
-        <NavItem icon="📅" label="Calender" />
-        </Link>
-        
-        <Link to="/profilepage"><NavItem icon="👤" label="Profile" /></Link>
+        <NavLink to="/homescreen">
+          {({ isActive }) => <NavItem icon="🏠" label="Home" active={isActive} />}
+        </NavLink>
+
+        <NavLink to="/favorite">
+          {({ isActive }) => <NavItem icon="🔖" label="Favorite" active={isActive} />}
+        </NavLink>
+
+        <button 
+          onClick={() => setOpen(!open)}
+          className="absolute left-1/2 -translate-x-1/2 -top-6 bg-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-3xl"
+        >
+          {open ? "✕" : "+"}
+        </button>
+
+        <NavLink to="/calendar">
+          {({ isActive }) => <NavItem icon="📅" label="Calender" active={isActive} />}
+        </NavLink>
+
+        <NavLink to="/profilepage">
+          {({ isActive }) => <NavItem icon="👤" label="Profile" active={isActive} />}
+        </NavLink>
       </div>
 
       {open && (
