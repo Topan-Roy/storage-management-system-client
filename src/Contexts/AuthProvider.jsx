@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  deleteUser,
 } from "firebase/auth";
 import { auth } from "../Firebase/firebase.config";
 
@@ -44,6 +45,10 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
+  const deleteAccount = () => {
+  if (!auth.currentUser) return Promise.reject("No user logged in");
+  return deleteUser(auth.currentUser);
+};
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
@@ -53,7 +58,7 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const authInfo = { user,setUser, loading, createUser, login, googleLogin, logOut,resetPassword };
+  const authInfo = { user,setUser, loading, createUser, login, googleLogin, logOut,resetPassword,deleteAccount };
 
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

@@ -64,7 +64,7 @@ const ProfilePage = () => {
       <h2 className="text-lg font-semibold mt-4"> {user?.displayName || user?.email || "User"}</h2>
 
       {/* Options */}
-      <div className="w-full px-6 mt-6 space-y-3">
+      <div className="w-full px-6 mt-6 space-y-3 space-x-1">
         <Link to="/editprofile">
         <OptionItem icon="👤" label="Edit Profile" />
         </Link>
